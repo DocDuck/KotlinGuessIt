@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
@@ -55,17 +56,19 @@ class  GameFragment : Fragment() {
 
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
-            updateScoreText()
-            updateWordText()
         }
         binding.skipButton.setOnClickListener {
             viewModel.onSkip()
-            updateScoreText()
-            updateWordText()
         }
-        // после того как заинитится модель, нужные слова из списка и очки отправится во вьюху
-        updateScoreText()
-        updateWordText()
+        /** Настраиваем LiveData вочеры, которые следят за соответствующими полями **/
+        viewModel.word.observe(this, Observer { newWord ->
+            // в колбек передается что надо делать при изменении данных в LiveData полях
+            binding.wordText.text = newWord
+        })
+
+        viewModel.score.observe(this, Observer { newScore ->
+            binding.scoreText.text = newScore.toString()
+        })
         return binding.root
 
     }
@@ -74,19 +77,22 @@ class  GameFragment : Fragment() {
      * Called when the game is finished
      */
     private fun gameFinished() {
-        val action = GameFragmentDirections.actionGameToScore(viewModel.score)
+        // делаем проверочку на ноль и передаем в навигационный параметр актуальный счет
+        val currentScore = viewModel.score.value ?: 0
+        val action = GameFragmentDirections.actionGameToScore(currentScore)
         findNavController(this).navigate(action)
     }
 
 
     /** Methods for updating the UI **/
-    private fun updateWordText() {
-        binding.wordText.text = viewModel.word
-
-    }
-
-    private fun updateScoreText() {
-        binding.scoreText.text = viewModel.score.toString()
-    }
+    // Так как word и score прослеживаются вочером, вызывать методы обновления вьюх не требуется
+//    private fun updateWordText() {
+//        binding.wordText.text = viewModel.word
+//
+//    }
+//
+//    private fun updateScoreText() {
+//        binding.scoreText.text = viewModel.score.toString()
+//    }
 
 }

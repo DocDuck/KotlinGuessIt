@@ -1,6 +1,7 @@
 package com.example.android.guesstheword.screens.game
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 
@@ -10,10 +11,14 @@ import androidx.lifecycle.ViewModel
 class GameViewModel : ViewModel() {
 
     // The current word
-    var word = ""
+    // Теперь это реактивные данные, за изменениями которых будет наблюдать вочер
+    // Observer в соответствующем фрагменте
+    val word = MutableLiveData<String>()
 
     // The current score
-    var score = 0
+    // Теперь это реактивные данные, за изменениями которых будет наблюдать вочер
+    // Observer в соответствующем фрагменте
+    val score = MutableLiveData<Int>()
 
     // The list of diseases - the front of the list is the next word to guess
     private lateinit var diseasesList: MutableList<String>
@@ -22,7 +27,9 @@ class GameViewModel : ViewModel() {
         resetList()
         Log.i("GameViewModel", "GameViewModel list must be filled!, $diseasesList")
         nextWord()
-        Log.i("GameViewModel", "GameViewModel viewed word is..., $word")
+        Log.i("GameViewModel", "GameViewModel viewed word is..., ${word.value}")
+        // лайв данные надо проинициализировать, в самой переменной указывается только тип данных и по дефолту он null
+        score.value = 0
     }
 
     /**
@@ -68,19 +75,22 @@ class GameViewModel : ViewModel() {
         if (diseasesList.isEmpty()) {
             // todo gameFinished()
         } else {
-            word = diseasesList.removeAt(0)
+            word.value = diseasesList.removeAt(0)
         }
     }
 
     /** Methods for buttons presses **/
 
     fun onSkip() {
-        score--
+        // приращение лейв-даты осуществляется через сеттер класса
+        // (в котлине это просто .value)
+        // так как значение может быть null то используется такая конструкция
+        score.value = (score.value)?.minus(1)
         nextWord()
     }
 
     fun onCorrect() {
-        score++
+        score.value = (score.value)?.plus(1)
         nextWord()
     }
 
