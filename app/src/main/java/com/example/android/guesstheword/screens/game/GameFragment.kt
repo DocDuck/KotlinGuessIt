@@ -17,11 +17,13 @@
 package com.example.android.guesstheword.screens.game
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
@@ -37,8 +39,11 @@ class GameFragment : Fragment() {
     // The current score
     private var score = 0
 
-    // The list of words - the front of the list is the next word to guess
-    private lateinit var wordList: MutableList<String>
+    // Model которая разруливает хранение данных и логику рендеринга этого фрагмента
+    private lateinit var viewModel: GameViewModel
+
+    // The list of diseases - the front of the list is the next word to guess
+    private lateinit var diseasesList: MutableList<String>
 
     private lateinit var binding: GameFragmentBinding
 
@@ -52,6 +57,10 @@ class GameFragment : Fragment() {
                 container,
                 false
         )
+
+        // Создаем и привязываем к этому фрагменту модель управления данными
+        Log.i("GameFragment", "Called ViewModelProviders.of")
+        viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
 
         resetList()
         nextWord()
@@ -68,30 +77,35 @@ class GameFragment : Fragment() {
      * Resets the list of words and randomizes the order
      */
     private fun resetList() {
-        wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
+        diseasesList = mutableListOf(
+                "амнезия",
+                "ангина",
+                "аппендицит",
+                "бореллиоз",
+                "БАС",
+                "варикоз",
+                "ветилиго",
+                "волчанка",
+                "ГЭРБ",
+                "гастрит",
+                "гепатит",
+                "диарея",
+                "дерматит",
+                "деменция",
+                "инфоркт",
+                "инсульт",
+                "иерсиниоз",
+                "катаракта",
+                "колит",
+                "кариес",
+                "лейкемия",
+                "лепра",
+                "ларингит",
+                "меланома",
+                "миозит",
+                "малярия"
         )
-        wordList.shuffle()
+        diseasesList.shuffle()
     }
 
     /**
@@ -107,10 +121,10 @@ class GameFragment : Fragment() {
      */
     private fun nextWord() {
         //Select and remove a word from the list
-        if (wordList.isEmpty()) {
+        if (diseasesList.isEmpty()) {
             gameFinished()
         } else {
-            word = wordList.removeAt(0)
+            word = diseasesList.removeAt(0)
         }
         updateWordText()
         updateScoreText()
