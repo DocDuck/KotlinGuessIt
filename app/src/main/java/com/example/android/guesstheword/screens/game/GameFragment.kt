@@ -63,6 +63,9 @@ class  GameFragment : Fragment() {
             updateScoreText()
             updateWordText()
         }
+        // после того как заинитится модель, нужные слова из списка и очки отправится во вьюху
+        updateScoreText()
+        updateWordText()
         return binding.root
 
     }

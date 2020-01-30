@@ -20,7 +20,9 @@ class GameViewModel : ViewModel() {
 
     init {
         resetList()
+        Log.i("GameViewModel", "GameViewModel list must be filled!, $diseasesList")
         nextWord()
+        Log.i("GameViewModel", "GameViewModel viewed word is..., $word")
     }
 
     /**
@@ -42,7 +44,7 @@ class GameViewModel : ViewModel() {
                 "диарея",
                 "дерматит",
                 "деменция",
-                "инфоркт",
+                "инфаркт",
                 "инсульт",
                 "иерсиниоз",
                 "катаракта",
