@@ -14,18 +14,16 @@ class GameViewModel : ViewModel() {
     // The current word
     // Теперь это реактивные данные, за изменениями которых будет наблюдать вочер
     // Observer в соответствующем фрагменте
+
+    // Инкапсулирую изменяемые сойства внутри вью модел класса
+    private val _word = MutableLiveData<String>()
     val word : LiveData<String>
         get() = _word
-    // Инкапсулирую свойства внутри вью модел класса
-    private val _word = MutableLiveData<String>()
 
-    // The current score
-    // Теперь это реактивные данные, за изменениями которых будет наблюдать вочер
-    // Observer в соответствующем фрагменте
+    // Инкапсулирую измениямые свойства внутри вью модел класса
+    private val _score = MutableLiveData<Int>()
     val score : LiveData<Int>
         get() = _score
-    // Инкапсулирую свойства внутри вью модел класса
-    private val _score = MutableLiveData<Int>()
 
     // The list of diseases - the front of the list is the next word to guess
     private lateinit var diseasesList: MutableList<String>
