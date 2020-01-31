@@ -51,6 +51,8 @@ class GameViewModel : ViewModel() {
             }
 
             override fun onFinish() {
+                // когда таймер кончится - число станет нулем и сработает флаг конца игры
+                // с последующим переходом на фрагмент конца игры
                 _currentTime.value = DONE
                 _eventGameFinish.value = true
             }

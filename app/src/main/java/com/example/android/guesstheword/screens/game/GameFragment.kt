@@ -72,7 +72,7 @@ class  GameFragment : Fragment() {
         })
 
         /** Вочер который обновляет таймер во вьюхе **/
-        /** Используется утилита преобразующая милисеки в стрингу **/
+        /** Используется утилита, преобразующая миллисеки в человекочитаемый таймер **/
         viewModel.currentTime.observe(this, Observer { newTime ->
             binding.timerText.text = DateUtils.formatElapsedTime(newTime)
 
@@ -89,7 +89,6 @@ class  GameFragment : Fragment() {
         })
 
         return binding.root
-
     }
 
 }
