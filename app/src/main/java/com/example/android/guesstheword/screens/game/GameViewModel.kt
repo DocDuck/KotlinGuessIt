@@ -30,6 +30,11 @@ class GameViewModel : ViewModel() {
     // The list of diseases - the front of the list is the next word to guess
     private lateinit var diseasesList: MutableList<String>
 
+    // Событие, которое передает в фрагмент состояние конец игры
+    private val _eventGameFinish = MutableLiveData<Boolean>()
+    val eventGameFinish: LiveData<Boolean>
+        get() = _eventGameFinish
+
     init {
         resetList()
         Log.i("GameViewModel", "GameViewModel list must be filled!, $diseasesList")
@@ -80,7 +85,8 @@ class GameViewModel : ViewModel() {
     private fun nextWord() {
         //Select and remove a word from the list
         if (diseasesList.isEmpty()) {
-            // todo gameFinished()
+            // если список пуст то игре конец, отправляем флаг в обзервер фрагмента
+            _eventGameFinish.value = true
         } else {
             _word.value = diseasesList.removeAt(0)
         }
@@ -104,5 +110,11 @@ class GameViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         Log.i("GameViewModel", "GameViewModel destroyed!")
+    }
+
+    // этот метод очищает флаг, чтобы при ререндеринге фрагмента
+    // не происходило повторно событие конец игры если оно уже произошло
+    fun onGameFinishComplete() {
+        _eventGameFinish.value = false
     }
 }

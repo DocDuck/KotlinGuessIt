@@ -69,30 +69,19 @@ class  GameFragment : Fragment() {
         viewModel.score.observe(this, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
         })
+
+        /** Этот LiveData вочер следит за флагом конец игры и когда тру - колбек отправляет на фрагмент конца игры с параметрами очков **/
+        viewModel.eventGameFinish.observe(this, Observer { isFinished ->
+            if (isFinished) {
+                val currentScore = viewModel.score.value ?: 0
+                val action = GameFragmentDirections.actionGameToScore(currentScore)
+                findNavController(this).navigate(action)
+                viewModel.onGameFinishComplete()
+            }
+        })
+
         return binding.root
 
     }
-
-    /**
-     * Called when the game is finished
-     */
-    private fun gameFinished() {
-        // делаем проверочку на ноль и передаем в навигационный параметр актуальный счет
-        val currentScore = viewModel.score.value ?: 0
-        val action = GameFragmentDirections.actionGameToScore(currentScore)
-        findNavController(this).navigate(action)
-    }
-
-
-    /** Methods for updating the UI **/
-    // Так как word и score прослеживаются вочером, вызывать методы обновления вьюх не требуется
-//    private fun updateWordText() {
-//        binding.wordText.text = viewModel.word
-//
-//    }
-//
-//    private fun updateScoreText() {
-//        binding.scoreText.text = viewModel.score.toString()
-//    }
 
 }
