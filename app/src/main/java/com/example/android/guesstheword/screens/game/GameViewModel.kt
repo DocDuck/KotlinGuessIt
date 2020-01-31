@@ -1,6 +1,7 @@
 package com.example.android.guesstheword.screens.game
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -13,12 +14,18 @@ class GameViewModel : ViewModel() {
     // The current word
     // Теперь это реактивные данные, за изменениями которых будет наблюдать вочер
     // Observer в соответствующем фрагменте
-    val word = MutableLiveData<String>()
+    val word : LiveData<String>
+        get() = _word
+    // Инкапсулирую свойства внутри вью модел класса
+    private val _word = MutableLiveData<String>()
 
     // The current score
     // Теперь это реактивные данные, за изменениями которых будет наблюдать вочер
     // Observer в соответствующем фрагменте
-    val score = MutableLiveData<Int>()
+    val score : LiveData<Int>
+        get() = _score
+    // Инкапсулирую свойства внутри вью модел класса
+    private val _score = MutableLiveData<Int>()
 
     // The list of diseases - the front of the list is the next word to guess
     private lateinit var diseasesList: MutableList<String>
@@ -29,7 +36,7 @@ class GameViewModel : ViewModel() {
         nextWord()
         Log.i("GameViewModel", "GameViewModel viewed word is..., ${word.value}")
         // лайв данные надо проинициализировать, в самой переменной указывается только тип данных и по дефолту он null
-        score.value = 0
+        _score.value = 0
     }
 
     /**
@@ -75,7 +82,7 @@ class GameViewModel : ViewModel() {
         if (diseasesList.isEmpty()) {
             // todo gameFinished()
         } else {
-            word.value = diseasesList.removeAt(0)
+            _word.value = diseasesList.removeAt(0)
         }
     }
 
@@ -85,12 +92,12 @@ class GameViewModel : ViewModel() {
         // приращение лейв-даты осуществляется через сеттер класса
         // (в котлине это просто .value)
         // так как значение может быть null то используется такая конструкция
-        score.value = (score.value)?.minus(1)
+        _score.value = (score.value)?.minus(1)
         nextWord()
     }
 
     fun onCorrect() {
-        score.value = (score.value)?.plus(1)
+        _score.value = (score.value)?.plus(1)
         nextWord()
     }
 
