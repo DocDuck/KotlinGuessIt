@@ -51,16 +51,13 @@ class  GameFragment : Fragment() {
                 false
         )
 
-        // Создаем и привязываем к этому фрагменту модель управления данными
-        Log.i("GameFragment", "Called ViewModelProviders.of")
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
 
-        binding.correctButton.setOnClickListener {
-            viewModel.onCorrect()
-        }
-        binding.skipButton.setOnClickListener {
-            viewModel.onSkip()
-        }
+        // Создаем прямое сообщение между вьюхой и вью-моделью минуя этот UI контроллер.
+        // Теперь простые обработчики на клики можно объявлять прямо во вьюхе
+        // и они будут обрабатываться во вью модели
+        binding.gameViewModel = viewModel
+
         /** Настраиваем LiveData вочеры, которые следят за соответствующими полями **/
         viewModel.word.observe(this, Observer { newWord ->
             // в колбек передается что надо делать при изменении данных в LiveData полях
