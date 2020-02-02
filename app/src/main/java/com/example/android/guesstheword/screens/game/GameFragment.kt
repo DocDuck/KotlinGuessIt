@@ -58,11 +58,9 @@ class  GameFragment : Fragment() {
         // и они будут обрабатываться во вью модели
         binding.gameViewModel = viewModel
 
-        /** Настраиваем LiveData вочеры, которые следят за соответствующими полями **/
-        viewModel.word.observe(this, Observer { newWord ->
-            // в колбек передается что надо делать при изменении данных в LiveData полях
-            binding.wordText.text = newWord
-        })
+        // Specify the current activity as the lifecycle owner of the binding. This is used so that
+        // the binding can observe LiveData updates
+        binding.lifecycleOwner = this
 
         viewModel.score.observe(this, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
